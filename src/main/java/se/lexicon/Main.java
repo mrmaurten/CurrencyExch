@@ -1,9 +1,10 @@
+package se.lexicon;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class CurrencyExchange {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         CurrencyExchange exchange = new CurrencyExchange();
@@ -28,11 +29,49 @@ public class CurrencyExchange {
             } else {
                 System.out.println("Enter the amount:");
                 double amount = getValidAmount(scanner);
-                double convertedAmount = converter.convertCurrency(choice, amount);
-                if (convertedAmount != -1) {
-            }
-            }
 
-
+                double exchangedAmount = exchange.convertCurrency(choice, amount);
+                if (exchangedAmount != -1) {
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    System.out.printf("Exchanged Amount: %.2f\n", exchangedAmount);
+                    System.out.println("Conversion completed on: " + dtf.format(now));
+                } else {
+                    System.out.println("Invalid conversion choice.");
+                }
+            }
+            System.out.println();
         }
+        scanner.close();
+    }
+
+    private static int getValidChoice(Scanner scanner) {
+        while (true) {
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+                if (choice >= 1 && choice <= 7) {
+                    return choice;
+                } else {
+                    System.out.print("Please enter a valid option (1-7): ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number (1-7): ");
+            }
+        }
+    }
+
+    private static double getValidAmount(Scanner scanner) {
+        while (true) {
+            try {
+                double amount = Double.parseDouble(scanner.nextLine());
+                if (amount >= 0) {
+                    return amount;
+                } else {
+                    System.out.print("Amount cannot be negative. Enter again: ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a numeric value: ");
+            }
+        }
+    }
 }
